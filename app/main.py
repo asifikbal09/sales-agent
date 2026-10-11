@@ -6,6 +6,9 @@ settings = get_settings()
 
 app = FastAPI(title=settings.APP_NAME)
 
+@app.get("/", tags=["Root"])
+def read_root():
+    return {"message": "Welcome to the FastAPI application!"}
 
 @app.get("/health", tags=["Health"] )
 def health():
