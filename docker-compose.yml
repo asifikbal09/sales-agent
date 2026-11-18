@@ -8,8 +8,6 @@ services:
     env_file:
       - .env
 
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/sales_agent
 
     volumes:
       - ./app:/app/app
@@ -27,9 +25,9 @@ services:
     container_name: sales-agent-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: sales_agent
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:

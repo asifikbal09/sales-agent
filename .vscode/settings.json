@@ -1,0 +1,31 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.languageServer": "Pylance",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.indexing": true,
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "pydantic",
+      "depth": 3,
+      "includeAllSymbols": true
+    },
+    {
+      "name": "fastapi",
+      "depth": 3,
+      "includeAllSymbols": true
+    },
+    {
+      "name": "sqlalchemy",
+      "depth": 3,
+      "includeAllSymbols": true
+    }
+  ],
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "off",
+    "strings": "on"
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.suggest.snippetsPreventQuickSuggestions": false
+}
+
