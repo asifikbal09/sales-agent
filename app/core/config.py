@@ -26,8 +26,7 @@ class Settings(BaseSettings):
             password=self.DB_PASSWORD.get_secret_value(),
             host=self.DB_HOST,
             port=self.DB_PORT,
-            database=self.DB_NAME,
-            query={"options": f"-c search_path={self.DB_SCHEMA}"}
+            database=self.DB_NAME
     )
 
 
