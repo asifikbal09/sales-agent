@@ -27,7 +27,7 @@ class Category(str, enum.Enum):
     ACCESSORIES = "accessories"
 
 
-class Porduct(Base, TimestampMixin):
+class Product(Base, TimestampMixin):
     __tablename__ = "products"
     __table_args__ = (
         CheckConstraint(sqltext="price > 0", name="price_positive"),
