@@ -6,14 +6,19 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.core.config import get_settings
 from app.db.base import Base
-import app.db.all_models # noqa: F401
+import app.db.all_models  # noqa: F401
 
 from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option(name="sqlalchemy.url", value=str(get_settings().DATABASE_URL).replace("%", "%%"))
+config.set_main_option(
+    name="sqlalchemy.url",
+    value=get_settings()
+    .DATABASE_URL.render_as_string(hide_password=False)
+    .replace("%", "%%"),
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -59,10 +64,11 @@ def run_migrations_offline() -> None:
 def do_run_migrations(connection: Connection) -> None:
     schema = get_settings().DB_SCHEMA
     connection.execute(text(text=f'SET search_path TO "{schema}",public'))
-    context.configure(connection=connection, target_metadata=target_metadata,
-                      version_table_schema=schema,
-                      include_schemas=True
-                      )
+    connection.commit()
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata
+    )
 
     with context.begin_transaction():
         context.run_migrations()
