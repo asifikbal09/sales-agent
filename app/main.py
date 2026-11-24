@@ -2,12 +2,14 @@ from fastapi import FastAPI, Depends
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import Settings, get_settings
+from app.core.exceptions.handlers import register_exception_handlers
 from app.db.session import SessionDep, get_session
 
 
 
 
 app = FastAPI(title=get_settings().APP_NAME, debug=get_settings().DEBUG)
+register_exception_handlers(app)
 
 @app.get("/health")
 async def health(settings: Settings = Depends(get_settings))-> dict[str, str]:

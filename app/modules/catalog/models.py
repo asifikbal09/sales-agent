@@ -24,7 +24,7 @@ class Category(str, enum.Enum):
     WATCH = "watch"
     TABLET = "tablet"
     MONITOR = "monitor"
-    ACCESSORIES = "accessories"
+    ACCESSORY = "accessory"
 
 
 class Product(Base, TimestampMixin):
@@ -49,7 +49,7 @@ class Product(Base, TimestampMixin):
     is_active: Mapped[bool] = mapped_column(
         Boolean, default=True, server_default="true"
     )
-    warrenty_months: Mapped[int] = mapped_column(
+    warranty_months: Mapped[int] = mapped_column(
         Integer, default=12, server_default="12"
     )
     category: Mapped[Category] = mapped_column(
