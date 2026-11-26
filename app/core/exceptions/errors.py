@@ -21,3 +21,7 @@ class ConflictError(AppError):
 
     def __init__(self, resource: str, key: str) -> None:
         super().__init__(f"{resource} with {key} already exists.", status_code=409)
+
+
+class LLMUnavailableError(AppError):
+    """Exception raised when the LLM service is unavailable."""

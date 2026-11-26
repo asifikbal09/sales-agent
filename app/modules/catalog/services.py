@@ -2,7 +2,7 @@
 from app.core.exceptions.errors import ConflictError, NotFoundError
 from app.modules.catalog.models import Product
 from app.modules.catalog.repositories import ProductRepository
-from app.modules.catalog.schemas import ProductCreate, ProductRead, ProductUpdate
+from app.modules.catalog.schemas import Page, ProductCreate, ProductFilters, ProductRead, ProductUpdate
 
 
 def to_read(product: Product) -> ProductRead:
@@ -12,18 +12,38 @@ class ProductService:
     def __init__(self, repo: ProductRepository)-> None:
         self.repo: ProductRepository = repo
 
+    # Create a new product
     async def create_product(self, data: ProductCreate)-> ProductRead:
         if await self.repo.exists_by_slug(data.slug):
             raise ConflictError("Product", data.slug)
         product = await self.repo.add(Product(**data.model_dump()))
-
         return to_read(product)
+
+    # Get a product by slug
     async def get_product(self, slug: str)-> ProductRead:
         product = await self.repo.get_by_slug(slug)
         if product is None:
             raise NotFoundError("Product", slug)
         return to_read(product)
 
+    # Get all products
+    async def get_all_products(self, filters:ProductFilters)-> Page:
+        if (
+            filters.min_price
+            and filters.max_price
+            and filters.min_price > filters.max_price
+        ):
+            filters.min_price, filters.max_price = filters.max_price, filters.min_price
+
+        items, total = await self.repo.search(filters)
+        return Page(
+            items=[to_read(p) for p in items],
+            total=total,
+            page=filters.page,
+            page_size=filters.page_size
+        )
+
+    # Update a product
     async def update_product(self, slug: str, data: ProductUpdate)-> ProductRead:
         product = await self.repo.get_by_slug(slug)
         if product is None:
